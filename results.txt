@@ -1,0 +1,34 @@
+SEQUENTIAL ALLOCATORS -
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /Users/rishav/Desktop/vortexmem/build
+[ 16%] Building CXX object CMakeFiles/vortexmem.dir/src/main.cpp.o
+[ 33%] Building CXX object CMakeFiles/vortexmem.dir/src/allocator/BaseAllocator.cpp.o
+[ 50%] Building CXX object CMakeFiles/vortexmem.dir/src/allocator/BestFitAllocator.cpp.o
+[ 66%] Building CXX object CMakeFiles/vortexmem.dir/src/allocator/FirstFitAllocator.cpp.o
+[ 83%] Building CXX object CMakeFiles/vortexmem.dir/src/allocator/WorstFitAllocator.cpp.o
+[100%] Linking CXX executable vortexmem
+[100%] Built target vortexmem
+
+--- Testing FIRST-FIT ---
+Layout- [Allocated ID 1: 200B, Addr: 0] -> [Free: 100B, Addr: 200] -> [Allocated ID 3: 200B, Addr: 300] -> [Free: 524B, Addr: 500] -> END
+Allocating 50B to ID 4:
+Layout- [Allocated ID 1: 200B, Addr: 0] -> [Allocated ID 4: 50B, Addr: 200] -> [Free: 50B, Addr: 250] -> [Allocated ID 3: 200B, Addr: 300] -> [Free: 524B, Addr: 500] -> END
+Clean up all remaining blocks:
+Layout- [Free: 1024B, Addr: 0] -> END
+
+--- Testing BEST-FIT ---
+Layout- [Allocated ID 1: 200B, Addr: 0] -> [Free: 100B, Addr: 200] -> [Allocated ID 3: 200B, Addr: 300] -> [Free: 524B, Addr: 500] -> END
+Allocating 50B to ID 4:
+Layout- [Allocated ID 1: 200B, Addr: 0] -> [Allocated ID 4: 50B, Addr: 200] -> [Free: 50B, Addr: 250] -> [Allocated ID 3: 200B, Addr: 300] -> [Free: 524B, Addr: 500] -> END
+Clean up all remaining blocks:
+Layout- [Free: 1024B, Addr: 0] -> END
+
+--- Testing WORST-FIT ---
+Layout- [Allocated ID 1: 200B, Addr: 0] -> [Free: 100B, Addr: 200] -> [Allocated ID 3: 200B, Addr: 300] -> [Free: 524B, Addr: 500] -> END
+Allocating 50B to ID 4:
+Layout- [Allocated ID 1: 200B, Addr: 0] -> [Free: 100B, Addr: 200] -> [Allocated ID 3: 200B, Addr: 300] -> [Allocated ID 4: 50B, Addr: 500] -> [Free: 474B, Addr: 550] -> END
+Clean up all remaining blocks:
+Layout- [Free: 1024B, Addr: 0] -> END
+
+
