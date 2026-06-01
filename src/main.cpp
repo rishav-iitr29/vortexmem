@@ -1,34 +1,37 @@
 #include <iostream>
-#include <memory>
-#include "../include/BaseAllocator.hpp"
-#include "../include/FirstFitAllocator.hpp"
-#include "../include/BestFitAllocator.hpp"
-#include "../include/WorstFitAllocator.hpp"
-
-using namespace std;
-
-void run_test(unique_ptr<BaseAllocator> alloc, const string& type) {
-    cout << "\n--- Testing " << type << " ---\n";
-    alloc->allocate(1, 200);
-    alloc->allocate(2, 100);
-    alloc->allocate(3, 200);
-    alloc->deallocate(2); // Leave an isolated 100B hole in the middle
-    alloc->debug_dump();
-
-    cout << "Allocating 50B to ID 4:\n";
-    alloc->allocate(4, 50);
-    alloc->debug_dump();
-
-    cout << "Clean up all remaining blocks:\n";
-    alloc->deallocate(1);
-    alloc->deallocate(3);
-    alloc->deallocate(4);
-    alloc->debug_dump();
-}
+#include "../include/BuddyAllocator.hpp"
 
 int main() {
-    run_test(make_unique<FirstFitAllocator>(1024), "FIRST-FIT");
-    run_test(make_unique<BestFitAllocator>(1024), "BEST-FIT");
-    run_test(make_unique<WorstFitAllocator>(1024), "WORST-FIT");
+    std::cout << " Testing Strategy: BUDDY SYSTEM\n";
+    
+    BuddyAllocator heap(1024); // Must be a power of two base
+    heap.debug_dump();
+
+    std::cout << "\n Step 1: Requesting Odd Sizes (Triggers Power-of-2 Padding) \n";
+    std::cout << "Allocating 70B to ID 1 (should snap to 128B)..." << std::endl;
+    heap.allocate(1, 70);
+    
+    std::cout << "Allocating 200B to ID 2 (should snap to 256B)..." << std::endl;
+    heap.allocate(2, 200);
+    heap.debug_dump();
+
+    std::cout << "\n Step 2: Isolating Buddy Segments \n";
+    std::cout << "Allocating 128B to ID 3..." << std::endl;
+    heap.allocate(3, 128);
+    heap.debug_dump();
+
+    std::cout << "\n Step 3: Sequential Deallocations (Cascading Merges) \n";
+    std::cout << "Freeing ID 1..." << std::endl;
+    heap.deallocate(1);
+    heap.debug_dump();
+
+    std::cout << "Freeing ID 3 (Should cascade merge with ID 1's remnants)..." << std::endl;
+    heap.deallocate(3);
+    heap.debug_dump();
+
+    std::cout << "Freeing ID 2 (Full structural collapse back to 1024B)..." << std::endl;
+    heap.deallocate(2);
+    heap.debug_dump();
+
     return 0;
 }

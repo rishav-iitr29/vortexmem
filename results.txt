@@ -32,3 +32,22 @@ Clean up all remaining blocks:
 Layout- [Free: 1024B, Addr: 0] -> END
 
 
+BUDDY SYSTEM -
+ Testing Strategy: BUDDY SYSTEM
+Buddy Layout- [Free: 1024B, Addr: 0] -> END
+
+ Step 1: Requesting Odd Sizes (Triggers Power-of-2 Padding) 
+Allocating 70B to ID 1 (should snap to 128B)...
+Allocating 200B to ID 2 (should snap to 256B)...
+Buddy Layout- [Alloc ID 1: 128B, Addr: 0] -> [Free: 128B, Addr: 128] -> [Alloc ID 2: 256B, Addr: 256] -> [Free: 512B, Addr: 512] -> END
+
+ Step 2: Isolating Buddy Segments 
+Allocating 128B to ID 3...
+Buddy Layout- [Alloc ID 1: 128B, Addr: 0] -> [Alloc ID 3: 128B, Addr: 128] -> [Alloc ID 2: 256B, Addr: 256] -> [Free: 512B, Addr: 512] -> END
+
+ Step 3: Sequential Deallocations (Cascading Merges) nFreeing ID 1...
+Buddy Layout- [Free: 128B, Addr: 0] -> [Alloc ID 3: 128B, Addr: 128] -> [Alloc ID 2: 256B, Addr: 256] -> [Free: 512B, Addr: 512] -> END
+Freeing ID 3 (Should cascade merge with ID 1's remnants)...
+Buddy Layout- [Free: 256B, Addr: 0] -> [Alloc ID 2: 256B, Addr: 256] -> [Free: 512B, Addr: 512] -> END
+Freeing ID 2 (Full structural collapse back to 1024B)...
+Buddy Layout- [Free: 1024B, Addr: 0] -> END
