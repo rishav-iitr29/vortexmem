@@ -7,6 +7,8 @@
 #include <unordered_map>
 #include <string>
 
+using namespace std;
+
 enum class EvictionPolicy { FIFO, LRU };
 
 struct CacheLine {
@@ -16,16 +18,16 @@ struct CacheLine {
 };
 
 struct CacheSet {
-    std::vector<CacheLine> lines;
+    vector<CacheLine> lines;
     
     // data structures for O(1) eviction policies
-    std::list<size_t> policy_list; //stores tags //Front is always the eviction target.
-    std::unordered_map<size_t, std::list<size_t>::iterator> policy_map; // Fast iterator lookup
+    list<size_t> policy_list; //stores tags //Front is always the eviction target.
+    unordered_map<size_t, list<size_t>::iterator> policy_map; // Fast iterator lookup
 };
 
 class Cache {
 private:
-    std::string cache_name;
+    string cache_name;
     size_t associativity;
     size_t block_size;
     size_t num_sets;
@@ -35,7 +37,7 @@ private:
     size_t index_bits;
     size_t index_mask;
 
-    std::vector<CacheSet> sets;
+    vector<CacheSet> sets;
 
     size_t hit_count = 0;
     size_t miss_count = 0;
@@ -45,7 +47,7 @@ private:
     void update_policy_on_insert(CacheSet& set, size_t tag);
 
 public:
-    Cache(std::string name, size_t assoc, size_t block_sz, size_t sets_num, EvictionPolicy pol);
+    Cache(string name, size_t assoc, size_t block_sz, size_t sets_num, EvictionPolicy pol);
     
     // return true on hit, false on miss
     bool access(size_t address, bool is_write);

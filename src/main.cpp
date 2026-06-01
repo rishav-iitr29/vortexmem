@@ -1,37 +1,35 @@
 #include <iostream>
-#include "../include/BuddyAllocator.hpp"
+#include "../include/Cache.hpp"
+
+using namespace std;
 
 int main() {
-    std::cout << " Testing Strategy: BUDDY SYSTEM\n";
-    
-    BuddyAllocator heap(1024); // Must be a power of two base
-    heap.debug_dump();
+    cout << " Testing Strategy: CACHE HIERARCHY\n";
 
-    std::cout << "\n Step 1: Requesting Odd Sizes (Triggers Power-of-2 Padding) \n";
-    std::cout << "Allocating 70B to ID 1 (should snap to 128B)..." << std::endl;
-    heap.allocate(1, 70);
-    
-    std::cout << "Allocating 200B to ID 2 (should snap to 256B)..." << std::endl;
-    heap.allocate(2, 200);
-    heap.debug_dump();
+    // Setup Hierarchy Layers
+    Cache tlb("TLB (Fully)", 4, 64, 1, EvictionPolicy::LRU);      // 4 way fully associative
+    Cache l1("L1 Cache",     1, 32, 4, EvictionPolicy::FIFO);     // Direct Mapped (1), 4 sets
+    Cache l2("L2 Cache",     2, 64, 8, EvictionPolicy::LRU);      // 2 Way Set Associative, 8 sets
 
-    std::cout << "\n Step 2: Isolating Buddy Segments \n";
-    std::cout << "Allocating 128B to ID 3..." << std::endl;
-    heap.allocate(3, 128);
-    heap.debug_dump();
+    // Address Stream Trace Array
+    vector<size_t> addresses = {0x1000, 0x1004, 0x1000, 0x2000, 0x1000};
 
-    std::cout << "\n Step 3: Sequential Deallocations (Cascading Merges) \n";
-    std::cout << "Freeing ID 1..." << std::endl;
-    heap.deallocate(1);
-    heap.debug_dump();
+    cout << "Streaming Address Accesses through Cascade Pipeline:\n\n";
+    for (size_t addr : addresses) {
+        cout << "Accessing Address: 0x" << hex << addr << dec << "\n";
+        
+        // Cascade lookup flow
+        if (!tlb.access(addr, false)) {
+            if (!l1.access(addr, false)) {
+                l2.access(addr, false);
+            }
+        }
+    }
 
-    std::cout << "Freeing ID 3 (Should cascade merge with ID 1's remnants)..." << std::endl;
-    heap.deallocate(3);
-    heap.debug_dump();
-
-    std::cout << "Freeing ID 2 (Full structural collapse back to 1024B)..." << std::endl;
-    heap.deallocate(2);
-    heap.debug_dump();
+    cout << "\n Final Simulation Telemetry Report \n";
+    tlb.print_stats();
+    l1.print_stats();
+    l2.print_stats();
 
     return 0;
 }
