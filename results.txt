@@ -81,3 +81,13 @@ Accessing VPN 5 (Address 0x5000)... This will trigger a Page Fault
 
 --- Final Paging Telemetry Report ---
 [Paging Telemetry] Page Faults: 5 | Disk Write-Backs: 0
+
+
+--- Comparative Analysis Report ---
+Workload: ../workload.txt
+
+[Strategy: First-Fit]
+Ext. Frag %:   0.01% | L1 Hit %:   0.00% | AMAT: 10106.00 cycles
+
+[Strategy: Buddy System]
+Ext. Frag %:  49.98% | L1 Hit %:   0.00% | AMAT: 10106.00 cycles

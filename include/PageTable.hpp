@@ -7,6 +7,8 @@
 #include <iostream>
 #include "MemoryBlock.hpp"
 
+using namespace std;
+
 struct PageTableEntry {
     int frame_number = -1;
     bool valid = false;
