@@ -5,6 +5,7 @@
 #include <vector>
 #include <unordered_map>
 #include <iostream>
+#include "MemoryBlock.hpp"
 
 struct PageTableEntry {
     int frame_number = -1;
@@ -19,10 +20,10 @@ private:
     size_t num_frames;
     
     // Forward map: Virtual Page Number (VPN) -> Page Table Entry
-    std::unordered_map<size_t, PageTableEntry> table;
+    unordered_map<size_t, PageTableEntry> table;
     
     // Reverse map: Physical Frame Number -> VPN (Needed for Clock eviction)
-    std::vector<int> frame_mapping; 
+    vector<int> frame_mapping; 
     size_t clock_hand = 0;
 
     // Instrumentation metrics
@@ -39,6 +40,8 @@ public:
     size_t access(size_t virtual_address, bool is_write);
     
     void print_stats() const;
+
+    size_t get_page_faults() const { return page_faults; }
 };
 
 #endif

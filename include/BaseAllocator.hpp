@@ -21,6 +21,8 @@ public:
     void coalesce();
 
     void debug_dump() const;
+
+    const list<MemoryBlock>& get_blocks() const { return blocks; }
 };
 
 #endif
