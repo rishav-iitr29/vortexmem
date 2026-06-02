@@ -67,3 +67,17 @@ Accessing Address: 0x1000
 TLB (Fully)  -> Hits: 3      Misses: 2      Hit Rate: 60.00%
 L1 Cache     -> Hits: 0      Misses: 2      Hit Rate: 0.00%
 L2 Cache     -> Hits: 0      Misses: 2      Hit Rate: 0.00%
+
+
+Testing Strategy: VIRTUAL PAGING & CLOCK
+--- 1. Bootstrapping & Filling Physical Memory ---
+RAM is now 100% full (4/4 frames occupied).
+
+--- 2. Setting up the Second Chance ---
+Accessing VPN 2 again to refresh its 'Referenced' bit...
+
+--- 3. Forcing a Clock Eviction ---
+Accessing VPN 5 (Address 0x5000)... This will trigger a Page Fault
+
+--- Final Paging Telemetry Report ---
+[Paging Telemetry] Page Faults: 5 | Disk Write-Backs: 0

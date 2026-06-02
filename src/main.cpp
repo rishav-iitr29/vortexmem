@@ -1,35 +1,40 @@
 #include <iostream>
-#include "../include/Cache.hpp"
-
-using namespace std;
+#include <iomanip>
+#include "../include/PageTable.hpp"
 
 int main() {
-    cout << " Testing Strategy: CACHE HIERARCHY\n";
+    std::cout << "Testing Strategy: VIRTUAL PAGING & CLOCK\n";
 
-    // Setup Hierarchy Layers
-    Cache tlb("TLB (Fully)", 4, 64, 1, EvictionPolicy::LRU);      // 4 way fully associative
-    Cache l1("L1 Cache",     1, 32, 4, EvictionPolicy::FIFO);     // Direct Mapped (1), 4 sets
-    Cache l2("L2 Cache",     2, 64, 8, EvictionPolicy::LRU);      // 2 Way Set Associative, 8 sets
+    // Setup: 4KB Pages, but only 16KB of Physical RAM (Exactly 4 Frames available)
+    size_t PAGE_SIZE = 4096;
+    size_t PHYS_MEM = 16384; 
+    
+    PageTable pt(PAGE_SIZE, PHYS_MEM);
 
-    // Address Stream Trace Array
-    vector<size_t> addresses = {0x1000, 0x1004, 0x1000, 0x2000, 0x1000};
+    std::cout << "--- 1. Bootstrapping & Filling Physical Memory ---\n";
+    // We will access 4 distinct Virtual Pages. This will fill all 4 physical frames.
+    pt.access(1 * PAGE_SIZE, false); // VPN 1 (Read)
+    pt.access(2 * PAGE_SIZE, true);  // VPN 2 (Write - Marks as Dirty)
+    pt.access(3 * PAGE_SIZE, false); // VPN 3 (Read)
+    pt.access(4 * PAGE_SIZE, false); // VPN 4 (Read)
+    
+    std::cout << "RAM is now 100% full (4/4 frames occupied).\n";
 
-    cout << "Streaming Address Accesses through Cascade Pipeline:\n\n";
-    for (size_t addr : addresses) {
-        cout << "Accessing Address: 0x" << hex << addr << dec << "\n";
-        
-        // Cascade lookup flow
-        if (!tlb.access(addr, false)) {
-            if (!l1.access(addr, false)) {
-                l2.access(addr, false);
-            }
-        }
-    }
+    std::cout << "\n--- 2. Setting up the Second Chance ---\n";
+    std::cout << "Accessing VPN 2 again to refresh its 'Referenced' bit...\n";
+    pt.access(2 * PAGE_SIZE, false); // A temporal hit
 
-    cout << "\n Final Simulation Telemetry Report \n";
-    tlb.print_stats();
-    l1.print_stats();
-    l2.print_stats();
+    std::cout << "\n--- 3. Forcing a Clock Eviction ---\n";
+    std::cout << "Accessing VPN 5 (Address 0x5000)... This will trigger a Page Fault\n";
+    // Clock hand starts at Frame 0 (VPN 1). VPN 1 is referenced, so it gets cleared.
+    // Clock hand moves to Frame 1 (VPN 2). VPN 2 is referenced, so it gets cleared.
+    // Clock hand moves to Frame 2 (VPN 3). VPN 3 is referenced, so it gets cleared.
+    // Clock hand moves to Frame 3 (VPN 4). VPN 4 is referenced, so it gets cleared.
+    // Clock hand loops to Frame 0 (VPN 1). VPN 1 is now not referenced.
+    pt.access(5 * PAGE_SIZE, false); 
+
+    std::cout << "\n--- Final Paging Telemetry Report ---\n";
+    pt.print_stats();
 
     return 0;
 }
