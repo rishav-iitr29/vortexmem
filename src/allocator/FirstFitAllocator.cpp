@@ -12,6 +12,8 @@ bool FirstFitAllocator::allocate(int id, size_t size) {
             it->size = size;
             it->is_free = false;
             it->block_id = id;
+
+            it->requested_size = size;
             successful_allocations++;
             return true;
         }

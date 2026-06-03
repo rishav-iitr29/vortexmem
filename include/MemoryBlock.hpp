@@ -6,6 +6,7 @@
 struct MemoryBlock {
     size_t start_address;
     size_t size;
+    size_t requested_size = 0;
     bool is_free;
     int block_id; // -1 if the block is free
 };

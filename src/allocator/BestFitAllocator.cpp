@@ -27,6 +27,8 @@ bool BestFitAllocator::allocate(int id, size_t size) {
         best_match->is_free = false;
         best_match->block_id = id;
 
+        best_match->requested_size = size;
+
         successful_allocations++;
         return true;
     }

@@ -42,6 +42,9 @@ bool BuddyAllocator::allocate(int id, size_t size) {
         if (target_block != blocks.end()) {
             target_block->is_free = false;
             target_block->block_id = id;
+
+            target_block->requested_size = size;
+            
             successful_allocations++;
             return true;
         }
@@ -62,7 +65,7 @@ bool BuddyAllocator::allocate(int id, size_t size) {
             split_candidate->size = new_size;
             
             // Insert the new buddy node right next to it in the list
-            blocks.insert(std::next(split_candidate), buddy);
+            blocks.insert(next(split_candidate), buddy);
             
             // Loop back around
             continue;
@@ -122,10 +125,10 @@ bool BuddyAllocator::deallocate(int id) {
 }
 
 void BuddyAllocator::debug_dump() const {
-    std::cout << "Buddy Layout- ";
+    cout << "Buddy Layout- ";
     for (const auto& block : blocks) {
-        std::cout << (block.is_free ? "[Free: " : "[Alloc ID " + std::to_string(block.block_id) + ": ")
+        cout << (block.is_free ? "[Free: " : "[Alloc ID " + to_string(block.block_id) + ": ")
                   << block.size << "B, Addr: " << block.start_address << "] -> ";
     }
-    std::cout << "END\n";
+    cout << "END\n";
 }

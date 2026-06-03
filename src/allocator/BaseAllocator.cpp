@@ -49,11 +49,17 @@ void BaseAllocator::debug_dump() const {
 void BaseAllocator::print_advanced_stats() const {
     size_t free_memory = 0;
     size_t largest_free = 0;
+    size_t total_internal_frag = 0;
 
     for (const auto& block : blocks) {
         if (block.is_free) {
             free_memory += block.size;
             if (block.size > largest_free) largest_free = block.size;
+        } else {
+            // If the block is occupied, count its internal padding
+            if (block.size >= block.requested_size) {
+                total_internal_frag += (block.size - block.requested_size);
+            }
         }
     }
 
@@ -62,6 +68,8 @@ void BaseAllocator::print_advanced_stats() const {
     double ext_frag = (free_memory > 0) ? (static_cast<double>(free_memory - largest_free) / free_memory) * 100.0 : 0.0;
     double success_rate = (total_allocations > 0) ? (static_cast<double>(successful_allocations) / total_allocations) * 100.0 : 0.0;
 
+    double int_frag = (allocated_memory > 0) ? (static_cast<double>(total_internal_frag) / allocated_memory) * 100.0 : 0.0;
+
     cout << "\n--- Memory Statistics ---\n";
     cout << "Total Memory: " << total_size << " B\n";
     cout << "Used Memory:  " << allocated_memory << " B\n";
@@ -69,6 +77,7 @@ void BaseAllocator::print_advanced_stats() const {
     cout << fixed << setprecision(2);
     cout << "Memory Utilization:     " << utilization << "%\n";
     cout << "External Fragmentation: " << ext_frag << "%\n";
+    cout << "Internal Fragmentation: " << int_frag << "%\n";
     
     cout << "\n--- Allocation Reliability ---\n";
     cout << "Total Attempts: " << total_allocations << "\n";

@@ -23,6 +23,7 @@ bool WorstFitAllocator::allocate(int id, size_t size) {
         worst_match->size = size;
         worst_match->is_free = false;
         worst_match->block_id = id;
+        worst_match->requested_size = size;
         successful_allocations++;
         return true;
     }
