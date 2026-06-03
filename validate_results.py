@@ -28,10 +28,10 @@ def validate_vortex_output(result_file):
             passed = False
             
     if passed and reasons:
-        return True, f"✓ {os.path.basename(result_file)} passed ({', '.join(reasons)})"
+        return True, f"{os.path.basename(result_file)} passed ({', '.join(reasons)})"
     elif passed:
-        return True, f"✓ {os.path.basename(result_file)} passed (No advanced metrics detected, but executed cleanly)"
-    return False, f"✗ {os.path.basename(result_file)} failed validation."
+        return True, f"{os.path.basename(result_file)} passed (No advanced metrics detected, but executed cleanly)"
+    return False, f"{os.path.basename(result_file)} FAILED validation."
 
 def main():
     print("VortexMem: Validating Telemetry Results\n")

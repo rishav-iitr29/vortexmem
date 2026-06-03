@@ -9,6 +9,8 @@
 #include <unistd.h>
 #include "../../include/BaseAllocator.hpp"
 #include "../../include/FirstFitAllocator.hpp"
+#include "../../include/WorstFitAllocator.hpp"
+#include "../../include/BestFitAllocator.hpp"
 #include "../../include/BuddyAllocator.hpp"
 #include "../../include/Cache.hpp"
 #include "../../include/PageTable.hpp"
@@ -36,15 +38,15 @@ private:
 
     void print_help() {
         cout << "\n--- VortexMem CLI Commands ---\n";
-        cout << "init memory <size> <first|buddy> - Initialize physical memory\n";
-        cout << "init pipeline                    - Boot Cache & Virtual Paging\n";
-        cout << "malloc <id> <size>               - Allocate memory\n";
-        cout << "free <id>                        - Free memory\n";
-        cout << "read <hex_addr>                  - Read memory (triggers caches)\n";
-        cout << "write <hex_addr>                 - Write memory (triggers caches)\n";
-        cout << "dump                             - Show memory layout\n";
-        cout << "stats                            - Show advanced metrics & AMAT\n";
-        cout << "exit                             - Close simulator\n";
+        cout << "init memory <size> <first|worst|best|buddy> - Initialize physical memory\n";
+        cout << "init pipeline                               - Boot Cache & Virtual Paging\n";
+        cout << "malloc <id> <size>                          - Allocate memory\n";
+        cout << "free <id>                                   - Free memory\n";
+        cout << "read <hex_addr>                             - Read memory (triggers caches)\n";
+        cout << "write <hex_addr>                            - Write memory (triggers caches)\n";
+        cout << "dump                                        - Show memory layout\n";
+        cout << "stats                                       - Show advanced metrics & AMAT\n";
+        cout << "exit                                        - Close simulator\n";
     }
 
 public:
@@ -87,6 +89,8 @@ public:
                 size_t size = stoull(args[2]);
                 string type = args[3];
                 if (type == "first") allocator = make_unique<FirstFitAllocator>(size);
+                else if (type == "worst") allocator = make_unique<WorstFitAllocator>(size);
+                else if (type == "best") allocator = make_unique<BestFitAllocator>(size);
                 else if (type == "buddy") allocator = make_unique<BuddyAllocator>(size);
                 cout << "System RAM initialized: " << size << " Bytes (" << type << "-fit)\n";
             }
@@ -130,6 +134,8 @@ public:
                 if (allocator) allocator->print_advanced_stats();
                 if (l1 && pt) {
                     cout << "--- Hardware Pipeline Metrics ---\n";
+                    double amat = Telemetry::calculate_amat(*l1, *l2, pt->get_page_faults());
+                    cout << "Average Memory Access Time (AMAT): " << amat << " cycles\n";
                     pt->print_stats();
                     tlb->print_stats();
                     l1->print_stats();

@@ -1,7 +1,0 @@
-# Benchmark Script
-ALLOC 1, 128
-ALLOC 2, 64
-ALLOC 3, 200
-FREE 1
-ALLOC 4, 30
-FREE 3

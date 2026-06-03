@@ -8,6 +8,7 @@ Memory operation complete.
 Memory operation complete.
 Memory operation complete.
 --- Hardware Pipeline Metrics ---
+Average Memory Access Time (AMAT): 6772.67 cycles
 [Paging Telemetry] Page Faults: 4 | Disk Write-Backs: 0
 TLB          -> Hits: 0      Misses: 6      Hit Rate: 0.00%
 L1           -> Hits: 0      Misses: 6      Hit Rate: 0.00%
