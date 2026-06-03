@@ -81,7 +81,10 @@ make
 ## Interactive CLI
 After launching the simulator:
 
-text VortexMem Command Line Interface Type 'help' for commands. 
+```
+VortexMem Command Line Interface 
+Type 'help' for commands. 
+```
 
 ### Available Commands
 
@@ -146,10 +149,12 @@ Flooding the memory with ```write``` commands to unique pages forces the MMU to 
 [Paging Telemetry] Page Faults: 9 | Disk Write-Backs: 5
 ```
 
+## Note:
+For more technical details, check the ```documentation/``` for ```TECHNICAL_DOCUMENTATION.md``` and ```TEST_ARTIFACTS.md```
+
 ## Project Structure
 
 ![Project Screenshot](./misc/ss2.png)
-
 
 ### License
 Made for educational purposes<br>
