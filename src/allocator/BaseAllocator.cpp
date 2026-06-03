@@ -6,7 +6,7 @@ using namespace std;
 
 BaseAllocator::BaseAllocator(size_t size) : total_size(size) {
     // Memory starts as a single continuous free block
-    blocks.push_back({0, total_size, true, -1});
+    blocks.push_back({0, total_size, true, -1, 0});
 }
 
 bool BaseAllocator::deallocate(int id) {

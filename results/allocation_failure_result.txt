@@ -8,6 +8,7 @@ Used Memory:  470 B
 Free Memory:  30 B
 Memory Utilization:     94.00%
 External Fragmentation: 0.00%
+Internal Fragmentation: 0.00%
 
 --- Allocation Reliability ---
 Total Attempts: 3
@@ -24,6 +25,7 @@ Used Memory:  470 B
 Free Memory:  30 B
 Memory Utilization:     94.00%
 External Fragmentation: 0.00%
+Internal Fragmentation: 0.00%
 
 --- Allocation Reliability ---
 Total Attempts: 5
@@ -40,6 +42,7 @@ Used Memory:  420 B
 Free Memory:  80 B
 Memory Utilization:     84.00%
 External Fragmentation: 37.50%
+Internal Fragmentation: 0.00%
 
 --- Allocation Reliability ---
 Total Attempts: 6
