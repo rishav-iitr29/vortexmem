@@ -13,24 +13,16 @@ else()
     add_compile_options(-Wall -Wextra -Werror -O3 -pthread)
 endif()
 
-# Find Thread component for the HTTP server
-find_package(Threads REQUIRED)
-
 # Include directories
 include_directories(include)
-include_directories(third_party)
 
 # Source files aggregation
 file(GLOB_RECURSE SRC_FILES 
     "src/allocator/*.cpp"
     "src/cache/*.cpp"
     "src/paging/*.cpp"
-    "src/engine/*.cpp"
     "src/server/*.cpp"
 )
 
 # Main Executable
 add_executable(vortexmem src/main.cpp ${SRC_FILES})
-
-# Link libraries
-target_link_libraries(vortexmem PRIVATE Threads::Threads)
