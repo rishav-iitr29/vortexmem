@@ -1,5 +1,6 @@
 #include "BaseAllocator.hpp"
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
@@ -43,4 +44,35 @@ void BaseAllocator::debug_dump() const {
                   << block.size << "B, Addr: " << block.start_address << "] -> ";
     }
     cout << "END\n";
+}
+
+void BaseAllocator::print_advanced_stats() const {
+    size_t free_memory = 0;
+    size_t largest_free = 0;
+
+    for (const auto& block : blocks) {
+        if (block.is_free) {
+            free_memory += block.size;
+            if (block.size > largest_free) largest_free = block.size;
+        }
+    }
+
+    size_t allocated_memory = total_size - free_memory;
+    double utilization = (total_size > 0) ? (static_cast<double>(allocated_memory) / total_size) * 100.0 : 0.0;
+    double ext_frag = (free_memory > 0) ? (static_cast<double>(free_memory - largest_free) / free_memory) * 100.0 : 0.0;
+    double success_rate = (total_allocations > 0) ? (static_cast<double>(successful_allocations) / total_allocations) * 100.0 : 0.0;
+
+    cout << "\n--- Memory Statistics ---\n";
+    cout << "Total Memory: " << total_size << " B\n";
+    cout << "Used Memory:  " << allocated_memory << " B\n";
+    cout << "Free Memory:  " << free_memory << " B\n";
+    cout << fixed << setprecision(2);
+    cout << "Memory Utilization:     " << utilization << "%\n";
+    cout << "External Fragmentation: " << ext_frag << "%\n";
+    
+    cout << "\n--- Allocation Reliability ---\n";
+    cout << "Total Attempts: " << total_allocations << "\n";
+    cout << "Successful:     " << successful_allocations << "\n";
+    cout << "Failed:         " << failed_allocations << "\n";
+    cout << "Success Rate:   " << success_rate << "%\n\n";
 }
