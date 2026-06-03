@@ -1,0 +1,9 @@
+# Cache Hit Test
+init pipeline
+# Cold miss (Fetches from RAM)
+read 0x1000
+# Temporal Hits (Should hit TLB directly)
+read 0x1000
+read 0x1000
+stats
+exit

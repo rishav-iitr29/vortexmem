@@ -6,6 +6,7 @@
 #include <vector>
 #include <sstream>
 #include <memory>
+#include <unistd.h>
 #include "../../include/BaseAllocator.hpp"
 #include "../../include/FirstFitAllocator.hpp"
 #include "../../include/BuddyAllocator.hpp"
@@ -51,14 +52,28 @@ public:
         cout << " VortexMem Command Line Interface\n";
         cout << " Type 'help' for commands.\n";
 
+        bool is_interactive = isatty(fileno(stdin));
+
         string input;
-        while (true) {
-            cout << "vortex> ";
-            getline(cin, input);
-            
-            if (input.empty()) continue;
+        
+        if (is_interactive) cout << "vortex> ";
+
+        while (getline(cin, input)) {
+            if (!input.empty() && input.back() == '\r') {
+                input.pop_back();
+            }
+
+            if (input.empty() || input[0] == '#') {
+                if (is_interactive) cout << "vortex> ";
+                continue;
+            }
             
             vector<string> args = split_command(input);
+            if (args.empty()) {
+                if (is_interactive) cout << "vortex> ";
+                continue;
+            }
+
             string cmd = args[0];
 
             if (cmd == "exit") {
@@ -99,11 +114,12 @@ public:
                 size_t v_addr = stoull(args[1], nullptr, 16);
                 bool is_write = (cmd == "write");
 
+                tlb->access(v_addr, is_write); 
+
                 size_t p_addr = pt->access(v_addr, is_write);
-                if (!tlb->access(p_addr, is_write)) {
-                    if (!l1->access(p_addr, is_write)) {
-                        l2->access(p_addr, is_write);
-                    }
+
+                if (!l1->access(p_addr, is_write)) {
+                    l2->access(p_addr, is_write); 
                 }
                 cout << "Memory operation complete.\n";
             }
@@ -114,7 +130,6 @@ public:
                 if (allocator) allocator->print_advanced_stats();
                 if (l1 && pt) {
                     cout << "--- Hardware Pipeline Metrics ---\n";
-                    cout << "System AMAT: " << Telemetry::calculate_amat(*l1, *l2, pt->get_page_faults()) << " cycles\n";
                     pt->print_stats();
                     tlb->print_stats();
                     l1->print_stats();
@@ -125,6 +140,8 @@ public:
             else {
                 cout << "Unknown command. Type 'help'.\n";
             }
+
+            if (is_interactive) cout << "vortex> ";
         }
     }
 };

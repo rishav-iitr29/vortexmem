@@ -1,0 +1,23 @@
+ VortexMem Command Line Interface
+ Type 'help' for commands.
+System RAM initialized: 4096 Bytes (buddy-fit)
+Layout- [Allocated ID 1: 128B, Addr: 0] -> [Allocated ID 3: 64B, Addr: 128] -> [Free: 64B, Addr: 192] -> [Allocated ID 2: 256B, Addr: 256] -> [Allocated ID 4: 512B, Addr: 512] -> [Allocated ID 5: 128B, Addr: 1024] -> [Free: 128B, Addr: 1152] -> [Allocated ID 6: 256B, Addr: 1280] -> [Free: 512B, Addr: 1536] -> [Free: 2048B, Addr: 2048] -> END
+Block ID 2 freed.
+Block ID 4 freed.
+Block ID 6 freed.
+Layout- [Allocated ID 1: 128B, Addr: 0] -> [Allocated ID 3: 64B, Addr: 128] -> [Allocated ID 7: 64B, Addr: 192] -> [Free: 256B, Addr: 256] -> [Free: 512B, Addr: 512] -> [Allocated ID 5: 128B, Addr: 1024] -> [Allocated ID 8: 128B, Addr: 1152] -> [Free: 256B, Addr: 1280] -> [Free: 512B, Addr: 1536] -> [Free: 2048B, Addr: 2048] -> END
+
+--- Memory Statistics ---
+Total Memory: 4096 B
+Used Memory:  512 B
+Free Memory:  3584 B
+Memory Utilization:     12.50%
+External Fragmentation: 42.86%
+
+--- Allocation Reliability ---
+Total Attempts: 8
+Successful:     8
+Failed:         0
+Success Rate:   100.00%
+
+Shutting down VortexMem...

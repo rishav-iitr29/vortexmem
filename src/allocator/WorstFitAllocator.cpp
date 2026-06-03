@@ -2,6 +2,7 @@
 using namespace std;
 
 bool WorstFitAllocator::allocate(int id, size_t size) {
+    total_allocations++;
     auto worst_match = blocks.end();
     size_t max_size = 0;
 
@@ -22,7 +23,9 @@ bool WorstFitAllocator::allocate(int id, size_t size) {
         worst_match->size = size;
         worst_match->is_free = false;
         worst_match->block_id = id;
+        successful_allocations++;
         return true;
     }
+    failed_allocations++;
     return false;
 }

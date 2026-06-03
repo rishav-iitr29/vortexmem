@@ -1,0 +1,10 @@
+# Multilevel Cache Spatial Locality Test
+init pipeline
+# 0x1000 brings 32 Bytes into L1, and 64 Bytes into L2
+read 0x1000
+
+# 0x1020 is 32 bytes later. 
+# It will MISS L1 (wrong 32B block) but HIT L2 (same 64B block!)
+read 0x1020
+stats
+exit

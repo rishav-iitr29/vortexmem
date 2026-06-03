@@ -1,0 +1,21 @@
+# Allocator Comparison: First-Fit vs Buddy
+# Test First-Fit
+init memory 1024 first
+malloc 1 100
+malloc 2 200
+malloc 3 100
+free 2
+malloc 4 150
+stats
+dump
+
+# Test Buddy System (Re-initializes automatically)
+init memory 1024 buddy
+malloc 1 100
+malloc 2 200
+malloc 3 100
+free 2
+malloc 4 150
+stats
+dump
+exit

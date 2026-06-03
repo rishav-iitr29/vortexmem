@@ -1,0 +1,19 @@
+# Stress Allocation Test
+init memory 4096 buddy
+malloc 1 128
+malloc 2 256
+malloc 3 64
+malloc 4 512
+malloc 5 128
+malloc 6 256
+dump
+
+# Fragment the memory heavily
+free 2
+free 4
+free 6
+malloc 7 64
+malloc 8 128
+dump
+stats
+exit

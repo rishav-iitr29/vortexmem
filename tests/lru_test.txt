@@ -1,0 +1,18 @@
+# LRU Eviction Test (TLB has 4-way capacity)
+init pipeline
+# Fill the 4 TLB lines
+read 0x1000
+read 0x2000
+read 0x3000
+read 0x4000
+
+# Read 0x1000 again to make it "Recently Used"
+read 0x1000
+
+# Read a 5th unique address. This should evict 0x2000, NOT 0x1000!
+read 0x5000
+
+# Verify 0x1000 is still safe (Should be a Hit)
+read 0x1000
+stats
+exit

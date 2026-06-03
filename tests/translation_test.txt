@@ -1,0 +1,19 @@
+# Virtual Translation & Dirty Write-Back Test
+init pipeline
+
+# Writing to memory marks the page as Dirty
+write 0x1000
+write 0x2000
+write 0x3000
+write 0x4000
+write 0x5000
+
+# Flooding the memory to trigger the Clock algorithm to evict a dirty page
+read 0x6000
+read 0x7000
+read 0x8000
+read 0x9000
+
+# Stats should show Disk Write-Backs > 0
+stats
+exit

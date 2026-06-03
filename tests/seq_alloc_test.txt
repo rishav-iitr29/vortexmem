@@ -1,0 +1,9 @@
+# Sequential Allocation Test
+init memory 1024 first
+malloc 1 100
+malloc 2 200
+malloc 3 300
+malloc 4 150
+dump
+stats
+exit

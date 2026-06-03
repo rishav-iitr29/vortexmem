@@ -1,0 +1,19 @@
+# Allocation Failure & Success Rate Test
+init memory 500 first
+# Fill it up (470 bytes)
+malloc 1 200
+malloc 2 150
+malloc 3 120
+stats
+
+# Try to over-allocate (These will fail)
+malloc 4 100
+malloc 5 50
+stats
+
+# Free space and try again
+free 2
+malloc 6 100
+dump
+stats
+exit

@@ -3,6 +3,8 @@
 using namespace std;
 
 bool BestFitAllocator::allocate(int id, size_t size) {
+    total_allocations++;
+
     auto best_match = blocks.end();
     size_t min_delta = -1; // act as max size_t capacity
 
@@ -24,7 +26,10 @@ bool BestFitAllocator::allocate(int id, size_t size) {
         best_match->size = size;
         best_match->is_free = false;
         best_match->block_id = id;
+
+        successful_allocations++;
         return true;
     }
+    failed_allocations++;
     return false;
 }

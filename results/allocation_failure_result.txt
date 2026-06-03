@@ -1,0 +1,50 @@
+ VortexMem Command Line Interface
+ Type 'help' for commands.
+System RAM initialized: 500 Bytes (first-fit)
+
+--- Memory Statistics ---
+Total Memory: 500 B
+Used Memory:  470 B
+Free Memory:  30 B
+Memory Utilization:     94.00%
+External Fragmentation: 0.00%
+
+--- Allocation Reliability ---
+Total Attempts: 3
+Successful:     3
+Failed:         0
+Success Rate:   100.00%
+
+Allocation Failed: Out of Memory!
+Allocation Failed: Out of Memory!
+
+--- Memory Statistics ---
+Total Memory: 500 B
+Used Memory:  470 B
+Free Memory:  30 B
+Memory Utilization:     94.00%
+External Fragmentation: 0.00%
+
+--- Allocation Reliability ---
+Total Attempts: 5
+Successful:     3
+Failed:         2
+Success Rate:   60.00%
+
+Block ID 2 freed.
+Layout- [Allocated ID 1: 200B, Addr: 0] -> [Allocated ID 6: 100B, Addr: 200] -> [Free: 50B, Addr: 300] -> [Allocated ID 3: 120B, Addr: 350] -> [Free: 30B, Addr: 470] -> END
+
+--- Memory Statistics ---
+Total Memory: 500 B
+Used Memory:  420 B
+Free Memory:  80 B
+Memory Utilization:     84.00%
+External Fragmentation: 37.50%
+
+--- Allocation Reliability ---
+Total Attempts: 6
+Successful:     4
+Failed:         2
+Success Rate:   66.67%
+
+Shutting down VortexMem...

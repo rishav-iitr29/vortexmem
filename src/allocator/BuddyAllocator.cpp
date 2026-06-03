@@ -17,6 +17,7 @@ size_t BuddyAllocator::next_power_of_two(size_t size) const {
 }
 
 bool BuddyAllocator::allocate(int id, size_t size) {
+    total_allocations++;
     size_t target_size = next_power_of_two(size);
     
     while (true) {
@@ -41,6 +42,7 @@ bool BuddyAllocator::allocate(int id, size_t size) {
         if (target_block != blocks.end()) {
             target_block->is_free = false;
             target_block->block_id = id;
+            successful_allocations++;
             return true;
         }
 
@@ -67,6 +69,7 @@ bool BuddyAllocator::allocate(int id, size_t size) {
         }
 
         // Case 3: Completely out of memory bounds
+        failed_allocations++;
         return false;
     }
 }

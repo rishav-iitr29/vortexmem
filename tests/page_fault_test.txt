@@ -1,0 +1,16 @@
+# Page Fault Test
+init pipeline
+
+# Page size is 4096 (0x1000 hex). These are all on Page 0. (1 Fault)
+read 0x0010
+read 0x00A0
+read 0x0F00
+
+# These are on Page 1, Page 2, and Page 3. (3 more Faults)
+read 0x1000
+read 0x2000
+read 0x3000
+
+# Total Page Faults should be exactly 4.
+stats
+exit

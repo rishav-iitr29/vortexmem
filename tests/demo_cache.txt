@@ -1,0 +1,26 @@
+# Demonstration: Multi-Level Cache & LRU
+
+init pipeline
+
+# 1. The Cold Start (Misses everywhere, fetches from RAM)
+read 0x1000
+read 0x2000
+
+# 2. Temporal Hits (Should hit TLB and stop cascade)
+read 0x1000
+read 0x2000
+
+# 3. Cache Flooding (Force evictions by reading many new addresses)
+read 0x3000
+read 0x4000
+read 0x5000
+read 0x6000
+read 0x7000
+read 0x8000
+
+# 4. The Rescue (0x1000 was evicted from L1, but L2 should catch it!)
+read 0x1000
+
+# Print results
+stats
+exit

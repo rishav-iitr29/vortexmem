@@ -1,0 +1,20 @@
+# Demonstration: Buddy System Fragmentation
+
+init memory 1024 buddy
+malloc 1 100
+malloc 2 80
+malloc 3 120
+malloc 4 60
+
+# Create holes in the memory space
+free 2
+free 4
+
+# Fill the holes with smaller blocks
+malloc 5 50
+malloc 6 40
+
+# Show the results
+stats
+dump
+exit

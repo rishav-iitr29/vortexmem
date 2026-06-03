@@ -1,0 +1,19 @@
+ VortexMem Command Line Interface
+ Type 'help' for commands.
+Hardware Pipeline (TLB, L1, L2, Paging) booted.
+Memory operation complete.
+Memory operation complete.
+Memory operation complete.
+Memory operation complete.
+Memory operation complete.
+Memory operation complete.
+Memory operation complete.
+Memory operation complete.
+Memory operation complete.
+--- Hardware Pipeline Metrics ---
+[Paging Telemetry] Page Faults: 9 | Disk Write-Backs: 5
+TLB          -> Hits: 0      Misses: 9      Hit Rate: 0.00%
+L1           -> Hits: 0      Misses: 9      Hit Rate: 0.00%
+L2           -> Hits: 0      Misses: 9      Hit Rate: 0.00%
+
+Shutting down VortexMem...

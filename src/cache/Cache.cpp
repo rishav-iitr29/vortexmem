@@ -50,9 +50,9 @@ bool Cache::access(size_t address, bool is_write) {
     // 1. Check for a Cache Hit
     for (size_t i = 0; i < set.lines.size(); ++i) {
         if (set.lines[i].valid && set.lines[i].tag == tag) {
-            hit_count++;
             if (is_write) set.lines[i].dirty = true;
             update_policy_on_hit(set, tag);
+            hit_count++;
             return true;
         }
     }
