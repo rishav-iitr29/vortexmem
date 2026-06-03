@@ -8,8 +8,8 @@
 
 using namespace std;
 
-void ScriptRunner::execute_workload(const string& filename, unique_ptr<BaseAllocator> allocator, mutex& sim_mutex) {
-    this->allocator = move(allocator);
+void ScriptRunner::execute_workload(const string& filename, unique_ptr<BaseAllocator> alloc, mutex& sim_mutex) {
+    this->allocator = std::move(alloc);
     ifstream file(filename);
     if (!file.is_open()) {
         cerr << "Error: Could not open workload file: " << filename << "\n";
@@ -37,10 +37,10 @@ void ScriptRunner::execute_workload(const string& filename, unique_ptr<BaseAlloc
             if (command == "ALLOC") {
                 int id; size_t size; char comma;
                 ss >> id >> comma >> size;
-                allocator->allocate(id, size);
+                if (this->allocator) this->allocator->allocate(id, size);
             } else if (command == "FREE") {
                 int id; ss >> id;
-                allocator->deallocate(id);
+                if (this->allocator) this->allocator->deallocate(id);
             } else if (command == "READ" || command == "WRITE") {
                 string hex_addr; ss >> hex_addr;
                 size_t v_addr = stoull(hex_addr, nullptr, 16);
@@ -53,9 +53,11 @@ void ScriptRunner::execute_workload(const string& filename, unique_ptr<BaseAlloc
             }
 
             // Update live telemetry
-            current_amat = Telemetry::calculate_amat(l1, l2, pt.get_page_faults());
-            current_ext_frag = Telemetry::calculate_external_fragmentation(allocator->get_blocks());
-            current_l1_hits = l1.get_hit_rate();
+            if (this->allocator) {
+                current_amat = Telemetry::calculate_amat(l1, l2, pt.get_page_faults());
+                current_ext_frag = Telemetry::calculate_external_fragmentation(this->allocator->get_blocks());
+                current_l1_hits = l1.get_hit_rate();
+            }
         }
 
         // unlock and sleep: give the web browser 1.5 seconds to fetch and render the new frame
@@ -74,7 +76,7 @@ nlohmann::json ScriptRunner::get_snapshot(mutex& sim_mutex) const {
     };
     
     j["blocks"] = nlohmann::json::array();
-    if (allocator) {
+    if (this->allocator) {
         for (const auto& b : allocator->get_blocks()) {
             j["blocks"].push_back({
                 {"start", b.start_address},

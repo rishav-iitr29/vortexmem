@@ -21,7 +21,7 @@ public:
     ScriptRunner() = default;
     ~ScriptRunner() = default;
 
-    void execute_workload(const string& filename, unique_ptr<BaseAllocator> allocator, mutex& sim_mutex);
+    void execute_workload(const string& filename, unique_ptr<BaseAllocator> alloc, mutex& sim_mutex);
 
     nlohmann::json get_snapshot(mutex& sim_mutex) const;
 };
